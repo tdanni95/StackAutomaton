@@ -1,0 +1,15 @@
+﻿@using StackAutomaton.Data;
+<div class="automatonGrid">
+    <AutomatonForm FileInputChangeMethod="@FileInputChange"></AutomatonForm>
+    <AutomatonRules rules="@ruleReader.Rules"></AutomatonRules>
+    <AutomatonFlow></AutomatonFlow>
+</div>
+
+@code {
+    private RuleReader ruleReader = new RuleReader();
+    public async void FileInputChange(InputFileChangeEventArgs e)
+    {
+        await this.ruleReader.ReadFile(e.File);
+        StateHasChanged();
+    }
+}

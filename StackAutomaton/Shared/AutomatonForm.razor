@@ -1,0 +1,25 @@
+﻿<div class="automatonForm">
+    <div>
+        <label>Input</label>
+        <input class="form-control" required />
+    </div>
+    <div class="mt-2">
+        <p>Converted input: <span>@formatted</span></p>
+    </div>
+    <div class="mt-2">
+        <label>Input file</label>
+        <InputFile OnChange="@InvokeFileChange" class="form-control"></InputFile>
+        
+    </div>
+    <div class="mt-2 d-grid">
+        <button class="btn btn-outline-success">Solve</button>
+    </div>
+</div>
+@code {
+    [Parameter] public Action<InputFileChangeEventArgs> FileInputChangeMethod { get; set; }
+    private void InvokeFileChange(InputFileChangeEventArgs e)
+    {
+        FileInputChangeMethod.Invoke(e);
+    }
+    private string formatted = "";
+}
