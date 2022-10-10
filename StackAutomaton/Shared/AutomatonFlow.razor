@@ -1,5 +1,14 @@
-﻿<div class="bg-red automatonFlow">FLOW</div>
+﻿@using StackAutomaton.Data;
+<div class="bg-red automatonFlow">
+    <ul class="list-group">
+        @foreach (var item in FlowSteps)
+        {
+            string listItemClass = item.IsError ? "list-group-item-danger" : "list-group-item-success";
+            <li class="list-group-item @listItemClass">@item.ToString()</li>
+        }
+    </ul>
+</div>
 
 @code {
-
+    [Parameter] public List<AutomatonStep> FlowSteps { get; set; }
 }

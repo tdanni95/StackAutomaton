@@ -1,25 +1,42 @@
 ﻿<div class="automatonForm">
-    <div>
-        <label>Input</label>
-        <input class="form-control" required />
-    </div>
-    <div class="mt-2">
-        <p>Converted input: <span>@formatted</span></p>
-    </div>
-    <div class="mt-2">
-        <label>Input file</label>
-        <InputFile OnChange="@InvokeFileChange" class="form-control"></InputFile>
-        
-    </div>
-    <div class="mt-2 d-grid">
-        <button class="btn btn-outline-success">Solve</button>
-    </div>
+    <form onsubmit="@SubmitForm" class="@FormClass">
+        <div>
+            <label>Input</label>
+            <input @bind="@CurrentValue" class="form-control" required />
+        </div>
+        <div class="mt-2">
+            <p><strong>Converted input:</strong></p>
+            <p>@Formatted</p>
+        </div>
+        <div class="mt-2">
+            <label>Input file</label>
+            <InputFile OnChange="@InvokeFileChange" class="form-control"></InputFile>
+
+        </div>
+        <div class="mt-2 d-grid">
+            <button onclick="@Walidate" class="btn btn-outline-success">Solve</button>
+        </div>
+    </form>
 </div>
 @code {
-    [Parameter] public Action<InputFileChangeEventArgs> FileInputChangeMethod { get; set; }
+    [Parameter] public EventCallback<InputFileChangeEventArgs> FileInputChangeMethod { get; set; }
+    [Parameter] public EventCallback<string> FormSubmit { get; set; }
+    [Parameter] public string Formatted { get; set; }
     private void InvokeFileChange(InputFileChangeEventArgs e)
     {
-        FileInputChangeMethod.Invoke(e);
+        FileInputChangeMethod.InvokeAsync(e);
     }
-    private string formatted = "";
+    private string CurrentValue = "";
+    private string FormClass = "";
+
+    private async void SubmitForm()
+    {
+        await FormSubmit.InvokeAsync(CurrentValue);
+    }
+
+    private void Walidate()
+    {
+        FormClass = "was-validated";
+    }
+
 }

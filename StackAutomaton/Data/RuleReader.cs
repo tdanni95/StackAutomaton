@@ -13,7 +13,7 @@ namespace StackAutomaton.Data
         private Dictionary<string, string> computedRules = new Dictionary<string, string>();
 
         public Dictionary<string, string> ComputedRules { get => computedRules; private set => computedRules = value; }
-        
+
 
         public async Task ReadFile(IBrowserFile file)
         {
@@ -22,7 +22,7 @@ namespace StackAutomaton.Data
             string content = await streamReader.ReadToEndAsync();
             streamReader.Close();
             stream.Close();
-            string[][] retVal = content.Split("\n").Select(l => l.Split(';').ToArray()).ToArray();
+            string[][] retVal = content.Split("\r\n").Select(l => l.Split(';').ToArray()).ToArray();
             this.Rules = retVal;
             GeneratedRules();
         }
@@ -35,7 +35,10 @@ namespace StackAutomaton.Data
                 for (int j = 1; j < Rules[i].Length; j++)
                 {
                     string ruleKey = mainRule + Rules[0][j];
-                    ComputedRules[ruleKey] = Rules[i][j];
+                    if (Rules[i][j] != "")
+                    {
+                        ComputedRules[ruleKey] = Rules[i][j];
+                    }
                 }
             }
         }

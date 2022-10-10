@@ -1,15 +1,26 @@
 ﻿@using StackAutomaton.Data;
 <div class="automatonGrid">
-    <AutomatonForm FileInputChangeMethod="@FileInputChange"></AutomatonForm>
+    <AutomatonForm FileInputChangeMethod="@FileInputChange" Formatted="@Formatted" FormSubmit="@FormSubmit"></AutomatonForm>
     <AutomatonRules rules="@ruleReader.Rules"></AutomatonRules>
-    <AutomatonFlow></AutomatonFlow>
+    <AutomatonFlow FlowSteps="@steps"></AutomatonFlow>
 </div>
 
 @code {
     private RuleReader ruleReader = new RuleReader();
+    private string Formatted = string.Empty;
+    private List<AutomatonStep> steps = new List<AutomatonStep>();
     public async void FileInputChange(InputFileChangeEventArgs e)
     {
         await this.ruleReader.ReadFile(e.File);
         StateHasChanged();
     }
+
+    public void FormSubmit(string Input){
+        STAutomaton Automaton = new STAutomaton(ruleReader.ComputedRules, Input);
+        Formatted = Automaton.Output;
+        Automaton.Main();
+        steps = Automaton.Steps;
+        Console.WriteLine("jee");
+    }
+
 }

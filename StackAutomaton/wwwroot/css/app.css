@@ -87,6 +87,8 @@ a, .btn-link {
 .automatonFlow {
     grid-column: 2;
     grid-row: 1 / span 2;
+    max-height: 80vh;
+    overflow: auto;
 }
 
 .scroll-table {
@@ -94,13 +96,26 @@ a, .btn-link {
     max-height: 50vh;
 }
 
-.scroll-table th {
-    position: sticky;
-    top: 0;
-    background: #fff;
+    .scroll-table th {
+        position: sticky;
+        top: 0;
+        background: #fff;
+    }
+
+
+@media screen and (max-width: 1000px) {
+    .automatonGrid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: 1fr;
+        gap: 5px;
+    }
+
+    .automatonFlow {
+        grid-column: 1;
+        grid-row: unset;
+    }
 }
-
-
 
 @supports (-webkit-touch-callout: none) {
     .status-bar-safe-area {
