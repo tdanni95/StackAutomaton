@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StackAutomaton.Data.SpecialCase;
 
 namespace StackAutomaton.Data
 {
@@ -26,6 +27,8 @@ namespace StackAutomaton.Data
         public Stack<string> Stack = new Stack<string>();
         public List<AutomatonStep> Steps = new List<AutomatonStep>();
 
+        private SpecialCaseFactory Factory;
+
         public string Input;
         public string Output;
         public string RuleOrder = string.Empty;
@@ -34,6 +37,7 @@ namespace StackAutomaton.Data
         int i = 0;
         public STAutomaton(Dictionary<string, string> Rules, string Input)
         {
+            Factory = new SpecialCaseFactory("");
             this.Rules = Rules;
             Input += '#';
             this.Input = FormatInput(Input);
@@ -100,23 +104,11 @@ namespace StackAutomaton.Data
 
         private bool HandleSpecialCases(string firstRule)
         {
-            if (firstRule == "pop")
-            {
-                i++;
-                return true;
-            }
-            else if (firstRule == "e")
-            {
-                return true;
-            }
-            else if (firstRule == "accept")
-            {
-                DidAccept = true;
-                i++;
-                return true;
-            }
-
-            return false;
+            Factory.Rule = firstRule;
+            ISpecialCase specialCase = Factory.GetInstance();
+            i += specialCase.Increment();
+            DidAccept = specialCase.Accept();
+            return specialCase.IsSpecial();
         }
 
         private string FormatInput(string Input)
