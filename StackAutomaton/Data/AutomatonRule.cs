@@ -35,7 +35,7 @@ namespace StackAutomaton.Data
         {
 
             List<string> generatedRules = new List<string>();
-            for (int i = 1; i < SubString.Length; i++)
+            for (int i = SubString.Length- 1; i > 0; i--)
             {
                 if (SubString[i] == '\'') continue;
                 if (i < SubString.Length - 1 && SubString[i + 1] == '\'')

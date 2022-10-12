@@ -24,6 +24,7 @@
     [Parameter] public string Formatted { get; set; }
     private void InvokeFileChange(InputFileChangeEventArgs e)
     {
+        if (e.File.ContentType != "text/csv") return;
         FileInputChangeMethod.InvokeAsync(e);
     }
     private string CurrentValue = "";

@@ -52,11 +52,16 @@ namespace StackAutomaton.Data
                 }
                 catch (Exception e)
                 {
-                    AutomatonStep step = new AutomatonStep(e.Message, String.Join("", Stack), RuleOrder, true);
-                    Steps.Add(step);
+                    PushStep(e.Message, true);
                     return;
                 }
             }
+        }
+
+        private void PushStep(string message, bool isError)
+        {
+            AutomatonStep step = new AutomatonStep(message, String.Join("", Stack), RuleOrder, isError);
+            Steps.Add(step);
         }
 
         private void Delta(char c)
@@ -69,12 +74,11 @@ namespace StackAutomaton.Data
                 AutomatonRule automatonRule = new AutomatonRule(rule);
                 automatonRule.DecodeExpression();
                 string[] ValuesAsArray = automatonRule.PushValues.ToArray();
-                Array.Reverse(ValuesAsArray);
                 ToStack(ValuesAsArray, automatonRule.RuleNumber);
             }
             else
             {
-                throw new Exception($"Bad character {key}");
+                throw new Exception($"Unknown rule {key}");
             }
         }
 
@@ -90,8 +94,8 @@ namespace StackAutomaton.Data
                     Stack.Push(item);
                 }
             }
-            AutomatonStep step = new AutomatonStep(GetInputFromIndex(), String.Join("", Stack), RuleOrder, false);
-            Steps.Add(step);
+
+            PushStep(GetInputFromIndex(), false);
         }
 
         private bool HandleSpecialCases(string firstRule)
